@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+  },
+  "devDependencies": {
+    "eslint": "^8.9.0",
+    "prettier": "^2.5.1",
+    "rollup": "^2.67.2",
+    "@rollup/plugin-commonjs": "^21.0.1",
+    "@rollup/plugin-node-resolve": "^13.1.3"
+  }
+}

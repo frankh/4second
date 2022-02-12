@@ -1,0 +1,89 @@
+<html>
+  <head>
+    <title>4 Second Word Game</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        align-content: baseline;
+        background-color: black;
+        color: white;
+
+        font-family: 'Clear Sans', 'Helvetica Neue', sans-serif;
+      }
+      header {
+        font-size: 2em;
+        text-transform: uppercase;
+      }
+      .game {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .givenLetters {
+        flex-wrap: wrap;
+        display: flex;
+      }
+
+      .timebar {
+        flex-basis: 98.1%;
+        background-color: gold;
+        height: 5px;
+        margin: 1px;
+        animation-fill-mode: forwards;
+      }
+
+      .timebar.animated {
+        animation: 4s linear timer;
+      }
+
+      @keyframes timer {
+        from {
+          flex-basis: 98.1%;
+        }
+
+        to {
+          flex-basis: 0.1%;
+        }
+      }
+      .flexBreak {
+        flex-basis: 100%;
+        height: 0;
+      }
+      .letter {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+
+        text-transform: uppercase;
+        font-size: 4em;
+        font-family: 'Menlo';
+        background-color:  #464646;
+        color: white;
+        width: 1em;
+        height: 1em;
+
+        margin: 1px;
+        border: solid 1px #898989;
+      }
+    </style>
+  </head>
+  <body>
+    <header>4 Second Word Game</header>
+    <div class="flexBreak"></div>
+
+    <div class="game">
+      <div class="givenLetters">
+        <div class="letter"></div>
+        <div class="letter"></div>
+        <div class="letter"></div>
+        <div class="timebar"></div>
+      </div>
+      <div class="flexBreak"></div>
+      <div class="guess">
+        <input name="guess">
+      </div>
+    </div>
+    <script src="main.js"></script>
+  </body>
+</html>
