@@ -1,7 +1,7 @@
 "use strict"
 
-const COMMON_WORDS_URL = "common_words.txt"
-const ALL_WORDS_URL = "all_words.txt"
+const COMMON_WORDS_URL = "wordlists/common_words.txt"
+const ALL_WORDS_URL = "wordlists/all_words.txt"
 const THREE_LETTER_WORDS = new Set([
   "brr",
   "bys",
@@ -91,7 +91,7 @@ class Game {
     const regex = new RegExp(
       `^${consonants[0]}.*${consonants[1]}.*${consonants[2]}`
     )
-    return word.match(regex)
+    return word.match(regex) !== null
   }
 }
 
@@ -111,6 +111,18 @@ class Game {
     console.log(game.matched_words)
     timebar.classList.add("animated")
   }
+
+  document.querySelector(".guess form").addEventListener("submit", (e) => {
+    e.preventDefault()
+    const formdata = new FormData(e.target)
+    const guess = formdata.get("guess")
+    alert(
+      "guess: " +
+        guess +
+        " correct?:" +
+        (game.isWord(guess) && game.matches(game.chosen_letters, guess))
+    )
+  })
 
   timebar.addEventListener("animationend", () => {
     timebar.classList.remove("animated")

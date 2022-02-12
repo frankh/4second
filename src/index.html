@@ -12,21 +12,67 @@
 
         font-family: 'Clear Sans', 'Helvetica Neue', sans-serif;
       }
+
+      * {
+        box-sizing: border-box;
+      }
+
       header {
         font-size: 2em;
         text-transform: uppercase;
       }
+
+      .hidden {
+        display:  none;
+      }
+
       .game {
         display: flex;
         flex-wrap: wrap;
+        width: 25em;
       }
+
       .givenLetters {
         flex-wrap: wrap;
         display: flex;
+        width: 100%;
+      }
+
+      .letter {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+
+        text-transform: uppercase;
+        font-size: 4em;
+        font-family: 'Menlo';
+        background-color:  #464646;
+        color: white;
+        flex-basis: calc(33.3% - 2px);
+
+        margin: 1px;
+        border: solid 1px #898989;
+      }
+
+      .guess {
+        flex-basis: 100%;
+      }
+
+      .guessInput {
+        width: 100%;
+        border: none;
+        background-color: #131313;
+        color: white;
+        font-size: 2em;
+        text-transform: uppercase;
+      }
+
+      .guessInput:focus-visible {
+        outline: none;
       }
 
       .timebar {
-        flex-basis: 98.1%;
+        flex-basis: 100%;
         background-color: gold;
         height: 5px;
         margin: 1px;
@@ -39,32 +85,17 @@
 
       @keyframes timer {
         from {
-          flex-basis: 98.1%;
+          flex-basis: 100%;
         }
 
         to {
-          flex-basis: 0.1%;
+          flex-basis: 0%;
         }
       }
+
       .flexBreak {
         flex-basis: 100%;
         height: 0;
-      }
-      .letter {
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-
-        text-transform: uppercase;
-        font-size: 4em;
-        font-family: 'Menlo';
-        background-color:  #464646;
-        color: white;
-        width: 1em;
-        height: 1em;
-
-        margin: 1px;
-        border: solid 1px #898989;
       }
     </style>
   </head>
@@ -77,11 +108,15 @@
         <div class="letter"></div>
         <div class="letter"></div>
         <div class="letter"></div>
+        <div class="flexBreak"></div>
         <div class="timebar"></div>
       </div>
       <div class="flexBreak"></div>
       <div class="guess">
-        <input name="guess">
+        <form>
+          <input class="guessInput" name="guess" size=0 maxlength=20>
+          <input class="hidden" type="submit">
+        </form>
       </div>
     </div>
     <script src="main.js"></script>
