@@ -1,5 +1,6 @@
 "use strict"
 
+import seedrandom from "seedrandom"
 const COMMON_WORDS_URL = "wordlists/common_words.txt"
 const ALL_WORDS_URL = "wordlists/all_words.txt"
 const THREE_LETTER_WORDS = new Set([
@@ -57,7 +58,7 @@ class Game {
   async newLetters() {
     for (;;) {
       var newLetters = this.generateLetters()
-      for (const [chosenLetters, _] of this.rounds) {
+      for (const [chosenLetters] of this.rounds) {
         if (newLetters == chosenLetters) {
           newLetters = this.generateLetters()
         }
@@ -127,17 +128,18 @@ class Game {
 ;(async () => {
   var game = new Game()
   await game.loadLists()
-  await game.generateRounds(10)
   var timebar = document.querySelector(".timebar")
   var gameElem = document.querySelector(".game")
   var currentGuessElem = null
 
-  var lastInputText = "";
+  var lastInputText = ""
   var submitGuess = (guessElem, force) => {
-    document.querySelector(".guess.template input.guessInput").value = "";
-    lastInputText = "";
-    const guess = guessElem.querySelector("input.guessInput").value.toLowerCase()
-    if(guess === "" && !force) {
+    document.querySelector(".guess.template input.guessInput").value = ""
+    lastInputText = ""
+    const guess = guessElem
+      .querySelector("input.guessInput")
+      .value.toLowerCase()
+    if (guess === "" && !force) {
       return
     }
     const correct =
@@ -152,7 +154,10 @@ class Game {
   }
 
   var nextWord = async () => {
-    if (currentGuessElem !== null && currentGuessElem.classList.contains("active")) {
+    if (
+      currentGuessElem !== null &&
+      currentGuessElem.classList.contains("active")
+    ) {
       submitGuess(currentGuessElem, true)
     }
     game.nextRound()
@@ -199,19 +204,27 @@ class Game {
     }
 
     setTimeout(() => {
-      var inputText = document.querySelector(".guess.template input.guessInput").value
+      var inputText = document.querySelector(
+        ".guess.template input.guessInput"
+      ).value
       var inputElem = currentGuessElem.querySelector("input.guessInput")
       if (inputText.length > lastInputText.length) {
         var char = inputText.substring(lastInputText.length)
         lastInputText = inputText
-        if (inputElem.value === "" && char[0].toLowerCase() != game.chosenLetters[0]) {
+        if (
+          inputElem.value === "" &&
+          char[0].toLowerCase() != game.chosenLetters[0]
+        ) {
           return
         }
         inputElem.value = inputElem.value + char
       } else if (inputText.length < lastInputText.length) {
         var diff = lastInputText.length - inputText.length
         lastInputText = inputText
-        inputElem.value = inputElem.value.substring(0, inputElem.value.length - diff)
+        inputElem.value = inputElem.value.substring(
+          0,
+          inputElem.value.length - diff
+        )
       }
     }, 10)
   }
@@ -222,7 +235,10 @@ class Game {
       return
     }
 
-    if (currentGuessElem === null || currentGuessElem.classList.contains("submitted")) {
+    if (
+      currentGuessElem === null ||
+      currentGuessElem.classList.contains("submitted")
+    ) {
       e.preventDefault()
       return
     }
@@ -233,12 +249,15 @@ class Game {
 
     var inputElem = currentGuessElem.querySelector("input.guessInput")
     if (/^[a-zA-Z]$/.test(e.key)) {
-      if (inputElem.value === "" && e.key.toLowerCase() != game.chosenLetters[0]) {
+      if (
+        inputElem.value === "" &&
+        e.key.toLowerCase() != game.chosenLetters[0]
+      ) {
         return
       }
       inputElem.value = inputElem.value + e.key
     } else if (e.key === "Backspace") {
-        inputElem.value = inputElem.value.substring(0, inputElem.value.length - 1)
+      inputElem.value = inputElem.value.substring(0, inputElem.value.length - 1)
     } else if (e.key === "Enter") {
       submitGuess(currentGuessElem)
     } else {
@@ -246,30 +265,48 @@ class Game {
     }
   }
 
-  document.querySelector("button.start").addEventListener("click", (e) => {
+  var start = async () => {
+    await game.generateRounds(10)
     gameElem.querySelector(".givenLetters").classList.remove("hidden")
-    e.target.classList.add("hidden")
+    for (const startButton of gameElem.querySelectorAll(".start")) {
+      startButton.classList.add("hidden")
+    }
     timebar.classList.add("animated")
     document.querySelector("input.guessInput").focus()
     var letterEls = document.querySelectorAll(".givenLetters .letter")
 
-
     setTimeout(() => {
       letterEls[2].textContent = "3"
       letterEls[2].classList.add("animated")
-      setTimeout(() => {letterEls[2].getAnimations()[0].currentTime += 1000}, 500)
+      setTimeout(() => {
+        letterEls[2].getAnimations()[0].currentTime += 1000
+      }, 500)
 
       setTimeout(() => {
         letterEls[1].textContent = "2"
         letterEls[1].classList.add("animated")
-        setTimeout(() => {letterEls[1].getAnimations()[0].currentTime += 2000}, 500)
+        setTimeout(() => {
+          letterEls[1].getAnimations()[0].currentTime += 2000
+        }, 500)
         setTimeout(() => {
           letterEls[0].textContent = "1"
           letterEls[0].classList.add("animated")
-        setTimeout(() => {letterEls[0].getAnimations()[0].currentTime += 3000}, 500)
+          setTimeout(() => {
+            letterEls[0].getAnimations()[0].currentTime += 3000
+          }, 500)
         }, 1000)
       }, 1000)
     }, 1000)
-    // nextWord()
+  }
+
+  document
+    .querySelector("button.startPractice")
+    .addEventListener("click", () => {
+      seedrandom(undefined, { global: true })
+      start()
+    })
+  document.querySelector("button.startDaily").addEventListener("click", () => {
+    seedrandom("test", { global: true })
+    start()
   })
 })()
