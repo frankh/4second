@@ -39,42 +39,71 @@ const THREE_LETTER_WORDS = new Set([
 
 class Game {
   static consonants = "bcdfghjklmnpqrstvwxyz"
-  chosen_letters
-  all_words
-  common_words
+  currentRound = 0
+  numRounds
+  rounds = []
+  allWords
+  commonWords
 
   async loadLists() {
     await fetch(COMMON_WORDS_URL)
       .then((response) => response.text())
-      .then((words) => (this.common_words = words.split("\n")))
+      .then((words) => (this.commonWords = words.split("\n")))
     await fetch(ALL_WORDS_URL)
       .then((response) => response.text())
-      .then((words) => (this.all_words = new Set(words.split("\n"))))
+      .then((words) => (this.allWords = new Set(words.split("\n"))))
   }
 
   async newLetters() {
     for (;;) {
-      this.chosen_letters = this.generateLetters()
-      console.log("trying: " + this.chosen_letters)
-      this.matched_words = []
-
-      if (THREE_LETTER_WORDS.has(this.chosen_letters)) {
-        console.log(this.chosen_letters + " is a word")
-        continue
-      }
-      for (const word of this.common_words) {
-        if (this.matches(this.chosen_letters, word)) {
-          this.matched_words.push(word)
+      var newLetters = this.generateLetters()
+      for (const [chosenLetters, _] of this.rounds) {
+        if (newLetters == chosenLetters) {
+          newLetters = this.generateLetters()
         }
       }
-      if (this.matched_words.length > 0) {
+      console.log("trying: " + newLetters)
+      var matchedWords = []
+
+      if (THREE_LETTER_WORDS.has(newLetters)) {
+        console.log(newLetters + " is a word")
+        continue
+      }
+      for (const word of this.commonWords) {
+        if (this.matches(newLetters, word)) {
+          matchedWords.push(word)
+        }
+      }
+      if (matchedWords.length > 0) {
         break
       }
     }
+    return [newLetters, matchedWords]
+  }
+
+  async generateRounds(n) {
+    this.numRounds = n
+    this.currentRound = -1
+    for (var i = 0; i < n; i++) {
+      const [chosenLetters, matchedWords] = await this.newLetters()
+      this.rounds.push([chosenLetters, matchedWords])
+    }
+    ;[this.chosenLetters, this.matchedWords] = this.rounds[0]
+  }
+
+  nextRound() {
+    this.currentRound++
+    if (this.currentRound == this.numRounds) {
+      this.chosenLetters = null
+      this.matchedWords = null
+      this.finished = true
+      return
+    }
+    ;[this.chosenLetters, this.matchedWords] = this.rounds[this.currentRound]
   }
 
   isWord(word) {
-    return this.all_words.has(word)
+    return this.allWords.has(word)
   }
 
   generateLetters() {
@@ -98,35 +127,149 @@ class Game {
 ;(async () => {
   var game = new Game()
   await game.loadLists()
+  await game.generateRounds(10)
   var timebar = document.querySelector(".timebar")
+  var gameElem = document.querySelector(".game")
+  var currentGuessElem = null
 
-  var nextWord = async () => {
-    game.newLetters()
-
-    var letterEls = document.querySelectorAll(".givenLetters > .letter")
-    letterEls[0].textContent = game.chosen_letters[0]
-    letterEls[1].textContent = game.chosen_letters[1]
-    letterEls[2].textContent = game.chosen_letters[2]
-    console.log(game.chosen_letters)
-    console.log(game.matched_words)
-    timebar.classList.add("animated")
+  var lastInputText = "";
+  var submitGuess = (guessElem, force) => {
+    document.querySelector(".guess.template input.guessInput").value = "";
+    lastInputText = "";
+    const guess = guessElem.querySelector("input.guessInput").value.toLowerCase()
+    if(guess === "" && !force) {
+      return
+    }
+    const correct =
+      game.isWord(guess) && game.matches(game.chosenLetters, guess)
+    guessElem.classList.remove("active")
+    guessElem.classList.add("submitted")
+    if (correct) {
+      guessElem.classList.add("correct")
+    } else {
+      guessElem.classList.add("incorrect")
+    }
   }
 
-  document.querySelector(".guess form").addEventListener("submit", (e) => {
-    e.preventDefault()
-    const formdata = new FormData(e.target)
-    const guess = formdata.get("guess")
-    alert(
-      "guess: " +
-        guess +
-        " correct?:" +
-        (game.isWord(guess) && game.matches(game.chosen_letters, guess))
-    )
-  })
+  var nextWord = async () => {
+    if (currentGuessElem !== null && currentGuessElem.classList.contains("active")) {
+      submitGuess(currentGuessElem, true)
+    }
+    game.nextRound()
+    if (game.finished) {
+      alert("game over!")
+      return
+    }
+
+    var newGuess = document.querySelector(".guess.template").cloneNode(true)
+    newGuess.classList.remove("template")
+    newGuess.classList.remove("invisible")
+    newGuess.querySelector("input.guessInput").disabled = true
+    newGuess.querySelector("input.guessInput").value = ""
+    newGuess.classList.add("active")
+    gameElem.querySelector(".guesses").prepend(newGuess)
+    currentGuessElem = newGuess
+
+    var letterEls = gameElem.querySelectorAll(".givenLetters .letter")
+    letterEls[0].textContent = game.chosenLetters[0]
+    letterEls[1].textContent = game.chosenLetters[1]
+    letterEls[2].textContent = game.chosenLetters[2]
+    console.log(game.chosenLetters)
+    console.log(game.matchedWords)
+    timebar.classList.add("animated")
+    letterEls[0].classList.add("animated")
+    letterEls[1].classList.add("animated")
+    letterEls[2].classList.add("animated")
+  }
 
   timebar.addEventListener("animationend", () => {
     timebar.classList.remove("animated")
+    for (const letterEl of gameElem.querySelectorAll(".givenLetters .letter")) {
+      letterEl.classList.remove("animated")
+    }
     setTimeout(() => nextWord(), 0)
   })
-  nextWord()
+
+  var androidKeydown = (e) => {
+    // 13 == Enter
+    if (e.which === 13) {
+      e.preventDefault()
+      submitGuess(currentGuessElem)
+      return
+    }
+
+    setTimeout(() => {
+      var inputText = document.querySelector(".guess.template input.guessInput").value
+      var inputElem = currentGuessElem.querySelector("input.guessInput")
+      if (inputText.length > lastInputText.length) {
+        var char = inputText.substring(lastInputText.length)
+        lastInputText = inputText
+        if (inputElem.value === "" && char[0].toLowerCase() != game.chosenLetters[0]) {
+          return
+        }
+        inputElem.value = inputElem.value + char
+      } else if (inputText.length < lastInputText.length) {
+        var diff = lastInputText.length - inputText.length
+        lastInputText = inputText
+        inputElem.value = inputElem.value.substring(0, inputElem.value.length - diff)
+      }
+    }, 10)
+  }
+
+  document.onkeydown = (e) => {
+    if (e.altKey || e.ctrlKey || e.metaKey) {
+      console.log("skipping due to meta key")
+      return
+    }
+
+    if (currentGuessElem === null || currentGuessElem.classList.contains("submitted")) {
+      e.preventDefault()
+      return
+    }
+
+    if (e.key === "Unidentified") {
+      return androidKeydown(e)
+    }
+
+    var inputElem = currentGuessElem.querySelector("input.guessInput")
+    if (/^[a-zA-Z]$/.test(e.key)) {
+      if (inputElem.value === "" && e.key.toLowerCase() != game.chosenLetters[0]) {
+        return
+      }
+      inputElem.value = inputElem.value + e.key
+    } else if (e.key === "Backspace") {
+        inputElem.value = inputElem.value.substring(0, inputElem.value.length - 1)
+    } else if (e.key === "Enter") {
+      submitGuess(currentGuessElem)
+    } else {
+      return
+    }
+  }
+
+  document.querySelector("button.start").addEventListener("click", (e) => {
+    gameElem.querySelector(".givenLetters").classList.remove("hidden")
+    e.target.classList.add("hidden")
+    timebar.classList.add("animated")
+    document.querySelector("input.guessInput").focus()
+    var letterEls = document.querySelectorAll(".givenLetters .letter")
+
+
+    setTimeout(() => {
+      letterEls[2].textContent = "3"
+      letterEls[2].classList.add("animated")
+      setTimeout(() => {letterEls[2].getAnimations()[0].currentTime += 1000}, 500)
+
+      setTimeout(() => {
+        letterEls[1].textContent = "2"
+        letterEls[1].classList.add("animated")
+        setTimeout(() => {letterEls[1].getAnimations()[0].currentTime += 2000}, 500)
+        setTimeout(() => {
+          letterEls[0].textContent = "1"
+          letterEls[0].classList.add("animated")
+        setTimeout(() => {letterEls[0].getAnimations()[0].currentTime += 3000}, 500)
+        }, 1000)
+      }, 1000)
+    }, 1000)
+    // nextWord()
+  })
 })()

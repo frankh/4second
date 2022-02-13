@@ -1,6 +1,7 @@
 <html>
   <head>
     <title>4 Second Word Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
       body {
         display: flex;
@@ -23,7 +24,12 @@
       }
 
       .hidden {
-        display:  none;
+        display: none !important;
+      }
+
+      .invisible {
+        left: -100000px;
+        position: absolute;
       }
 
       .game {
@@ -38,7 +44,7 @@
         width: 100%;
       }
 
-      .letter {
+      .letterBox {
         display: inline-flex;
         justify-content: center;
         align-items: center;
@@ -52,10 +58,55 @@
 
         margin: 1px;
         border: solid 1px #898989;
+
+      }
+
+      .letterBox:before {
+        content: "a";
+        visibility: hidden;
+        width: 0;
+      }
+
+      .letter {
+        transition: transform 1s;
+        transform: rotateX(-90deg);
+      }
+
+      .letter.animated {
+        animation: 4s linear letterflip;
+      }
+
+      @keyframes letterflip {
+        0% {
+          transform: rotateX(90deg);
+        }
+
+        5% {
+          transform: rotateX(0);
+        }
+
+        93% {
+          transform: rotateX(0);
+        }
+
+        98% {
+          transform: rotateX(-90deg);
+        }
+
+        100% {
+          transform: rotateX(-90deg);
+        }
+      }
+
+      .guesses {
+        display: flex;
+        flex-basis: 100%;
+        flex-wrap: wrap;
       }
 
       .guess {
         flex-basis: 100%;
+        padding: 3px;
       }
 
       .guessInput {
@@ -69,6 +120,14 @@
 
       .guessInput:focus-visible {
         outline: none;
+      }
+
+      .guess.correct .guessInput {
+        outline: solid 1px green;
+      }
+
+      .guess.incorrect .guessInput {
+        outline: solid 1px red;
       }
 
       .timebar {
@@ -104,21 +163,21 @@
     <div class="flexBreak"></div>
 
     <div class="game">
-      <div class="givenLetters">
-        <div class="letter"></div>
-        <div class="letter"></div>
-        <div class="letter"></div>
+      <button class="start">Start</button>
+      <div class="givenLetters hidden">
+        <div class="letterBox"><div class="letter"></div></div>
+        <div class="letterBox"><div class="letter"></div></div>
+        <div class="letterBox"><div class="letter"></div></div>
         <div class="flexBreak"></div>
         <div class="timebar"></div>
       </div>
       <div class="flexBreak"></div>
-      <div class="guess">
-        <form>
-          <input class="guessInput" name="guess" size=0 maxlength=20>
-          <input class="hidden" type="submit">
-        </form>
+      <div class="guess template invisible">
+        <input class="guessInput" autofocus name="guess" size=0 maxlength=20>
+      </div>
+      <div class="guesses">
       </div>
     </div>
-    <script src="main.js"></script>
+    <script src="main.js?cache=10"></script>
   </body>
 </html>
