@@ -12,6 +12,9 @@
         align-content: baseline;
         background-color: black;
         color: white;
+        width: 100%;
+        padding:  0;
+        margin: 0;
 
         font-family: 'Clear Sans', 'Helvetica Neue', sans-serif;
       }
@@ -37,7 +40,9 @@
       .game {
         display: flex;
         flex-wrap: wrap;
-        width: 25em;
+        max-width: 25em;
+        width: 100%;
+        padding: 10px;
       }
 
       .givenLetters {
@@ -104,12 +109,15 @@
         display: flex;
         flex-basis: 100%;
         flex-wrap: wrap;
+        width: 100%;
       }
 
       .guess {
         display: flex;
         flex-basis: 100%;
+        width: 100%;
         padding: 3px;
+        overflow: visible;
       }
 
       .guess .help {
@@ -124,12 +132,14 @@
       }
 
       .guessInput {
-        flex-basis: 100%;
+        width: 100%;
         border: none;
         background-color: #131313;
         color: white;
         font-size: 2em;
         text-transform: uppercase;
+        -webkit-text-fill-color: white;
+        opacity: 1;
       }
 
       .guessInput:focus-visible {
