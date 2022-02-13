@@ -305,8 +305,9 @@ class Game {
       seedrandom(undefined, { global: true })
       start()
     })
+
   document.querySelector("button.startDaily").addEventListener("click", () => {
-    seedrandom("test", { global: true })
+    seedrandom(new Date().toDateString(), { global: true })
     start()
   })
 })()
