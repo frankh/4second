@@ -162,15 +162,19 @@ class Game {
     }
     game.nextRound()
     if (game.finished) {
-      alert("game over!")
+      for (const helpElem of gameElem.querySelectorAll(".guess .help")) {
+        helpElem.classList.remove("hidden")
+      }
       return
     }
 
-    var newGuess = document.querySelector(".guess.template").cloneNode(true)
+    var newGuess = gameElem.querySelector(".guess.template").cloneNode(true)
     newGuess.classList.remove("template")
     newGuess.classList.remove("invisible")
     newGuess.querySelector("input.guessInput").disabled = true
     newGuess.querySelector("input.guessInput").value = ""
+    newGuess.querySelector(".help").title =
+      game.chosenLetters.toUpperCase() + ": " + game.matchedWords[0]
     newGuess.classList.add("active")
     gameElem.querySelector(".guesses").prepend(newGuess)
     currentGuessElem = newGuess
