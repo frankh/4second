@@ -203,7 +203,6 @@ class Game {
     // 13 == Enter
     if (e.which === 13) {
       e.preventDefault()
-      submitGuess(currentGuessElem)
       return
     }
 
@@ -263,9 +262,7 @@ class Game {
     } else if (e.key === "Backspace") {
       inputElem.value = inputElem.value.substring(0, inputElem.value.length - 1)
     } else if (e.key === "Enter") {
-      submitGuess(currentGuessElem)
-    } else {
-      return
+      e.preventDefault()
     }
   }
 
@@ -303,14 +300,12 @@ class Game {
     }, 1000)
   }
 
-  document
-    .querySelector("button.startPractice")
-    .addEventListener("click", () => {
-      seedrandom(undefined, { global: true })
-      start()
-    })
+  document.querySelector(".startPractice").addEventListener("click", () => {
+    seedrandom(undefined, { global: true })
+    start()
+  })
 
-  document.querySelector("button.startDaily").addEventListener("click", () => {
+  document.querySelector(".startDaily").addEventListener("click", () => {
     seedrandom(new Date().toDateString(), { global: true })
     start()
   })
