@@ -10,3 +10,7 @@ lint:
 .PHONY: format
 format:
 	npx prettier -w src/**.js --no-semi
+
+.PHONY: deploy
+deploy: build
+	bash -c "cd output && git add . && git commit -m 'Deploy' && git push origin gh-pages"
