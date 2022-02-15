@@ -4,6 +4,9 @@ import seedrandom from "seedrandom"
 import dndod from "dndod"
 import "dndod/dist/dndod-popup.min.css"
 
+// The date of the first daily game
+// Tue Feb 15 2022
+const EPOCH = 1644883200
 const COMMON_WORDS_URL = "wordlists/common_words.txt"
 const ALL_WORDS_URL = "wordlists/all_words.txt"
 const THREE_LETTER_WORDS = new Set([
@@ -46,6 +49,8 @@ class Game {
   currentRound = 0
   numRounds
   rounds = []
+  guesses = []
+  name
   allWords
   commonWords
 
@@ -95,6 +100,13 @@ class Game {
     ;[this.chosenLetters, this.matchedWords] = this.rounds[0]
   }
 
+  async newGame(name, numRounds) {
+    this.guesses = []
+    this.rounds = []
+    this.name = name
+    await this.generateRounds(numRounds)
+  }
+
   nextRound() {
     this.currentRound++
     if (this.currentRound == this.numRounds) {
@@ -125,6 +137,33 @@ class Game {
       `^${consonants[0]}.*${consonants[1]}.*${consonants[2]}`
     )
     return word.match(regex) !== null
+  }
+
+  guess(guess) {
+    const correct =
+      this.isWord(guess) && this.matches(this.chosenLetters, guess)
+    this.guesses[this.currentRound] = {
+      guess: guess,
+      correct: correct,
+    }
+    return correct
+  }
+
+  getScore() {
+    var numCorrect = 0
+    var longestWord = 0
+    for (const guess of this.guesses) {
+      if (guess.correct) {
+        numCorrect++
+        if (guess.guess.length > longestWord) {
+          longestWord = guess.guess.length
+        }
+      }
+    }
+    return {
+      numCorrect: numCorrect,
+      longestWord: longestWord,
+    }
   }
 }
 
@@ -162,8 +201,7 @@ class Game {
       newElem.append(letterElem)
     }
     guessElem.prepend(newElem)
-    const correct =
-      game.isWord(guess) && game.matches(game.chosenLetters, guess)
+    const correct = game.guess(guess)
     guessElem.classList.remove("active")
     guessElem.classList.add("submitted")
     if (correct) {
@@ -187,6 +225,8 @@ class Game {
           guessElem.querySelector(".help").classList.remove("hidden")
         }
       }
+      recordScores()
+      showScores()
       return
     }
 
@@ -195,10 +235,12 @@ class Game {
     newGuess.classList.remove("invisible")
     newGuess.querySelector("input.guessInput").disabled = true
     newGuess.querySelector("input.guessInput").value = ""
-    const helpText =
-      game.chosenLetters.toUpperCase() + ": " + game.matchedWords[0]
+    const helpText = `
+      Letters: ${game.chosenLetters.toUpperCase()}
+      Example answer: ${game.matchedWords[0]}
+    `
     newGuess.querySelector(".help").addEventListener("click", () => {
-      dndod.alert(helpText, { animation: "none" })
+      dndod.alert(helpText, { animation: "none", textAlign: "left" })
     })
     newGuess.classList.add("active")
     gameElem.querySelector(".guesses").prepend(newGuess)
@@ -291,8 +333,43 @@ class Game {
     }
   }
 
+  var recordScores = () => {
+    if (!localStorage.scores) {
+      localStorage.scores = {}
+    }
+  }
+
+  var showScores = () => {
+    const score = game.getScore()
+    const msg = `
+      4 Second Word Game (${game.name})
+      Correct answers: ${score.numCorrect}/${game.rounds.length}
+      Longest answer: ${score.longestWord}
+    `
+    dndod.popup({
+      msg: msg,
+      textAlign: "left",
+      buttons: [
+        {
+          text: "Close",
+          type: "default",
+          handler: (e, p) => {
+            p.close()
+          },
+        },
+        {
+          text: "Share",
+          type: "primary",
+          handler: () => {
+            navigator.clipboard.writeText(msg)
+            dndod.alert("Copied to clipboard", { animation: "none" })
+          },
+        },
+      ],
+    })
+  }
+
   var start = async () => {
-    await game.generateRounds(10)
     gameElem.querySelector(".givenLetters").classList.remove("hidden")
     for (const startButton of gameElem.querySelectorAll(".start")) {
       startButton.classList.add("hidden")
@@ -325,13 +402,38 @@ class Game {
     }, 1000)
   }
 
-  document.querySelector(".startPractice").addEventListener("click", () => {
-    seedrandom(undefined, { global: true })
-    start()
+  document.querySelector(".howToPlay").addEventListener("click", async () => {
+    const msg = document.querySelector(".howToPlayText").cloneNode(true)
+    msg.classList.remove("hidden")
+    dndod.popup({
+      title: "How to play 4 Second Word Game",
+      msg: msg,
+      textAlign: "left",
+      enableHTML: true,
+      buttons: [
+        {
+          text: "Close",
+          type: "default",
+          handler: (e, p) => {
+            p.close()
+          },
+        },
+      ],
+    })
   })
 
-  document.querySelector(".startDaily").addEventListener("click", () => {
+  document
+    .querySelector(".startPractice")
+    .addEventListener("click", async () => {
+      seedrandom(undefined, { global: true })
+      await game.newGame("Practice", 5)
+      start()
+    })
+
+  document.querySelector(".startDaily").addEventListener("click", async () => {
     seedrandom(new Date().toDateString(), { global: true })
+    const dailyNum = Math.ceil((new Date().getTime() - EPOCH) / 86400000)
+    await game.newGame("Daily #" + dailyNum, 10)
     start()
   })
 })()
