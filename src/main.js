@@ -97,7 +97,7 @@ class Game {
       const [chosenLetters, matchedWords] = await this.newLetters()
       this.rounds.push([chosenLetters, matchedWords])
     }
-    [this.chosenLetters, this.matchedWords] = this.rounds[0]
+    ;[this.chosenLetters, this.matchedWords] = this.rounds[0]
   }
 
   async newGame(name, numRounds) {
@@ -115,7 +115,7 @@ class Game {
       this.finished = true
       return
     }
-    [this.chosenLetters, this.matchedWords] = this.rounds[this.currentRound]
+    ;[this.chosenLetters, this.matchedWords] = this.rounds[this.currentRound]
   }
 
   isWord(word) {
@@ -167,7 +167,7 @@ class Game {
   }
 }
 
-(async () => {
+;(async () => {
   var game = new Game()
   await game.loadLists()
   var timebar = document.querySelector(".timebar")
@@ -349,12 +349,17 @@ class Game {
 Correct answers: ${score.numCorrect}/${game.rounds.length}
 Longest answer: ${score.longestWord}
 `
+    var closeButtonText = "Close"
+    if (game.finished) {
+      closeButtonText = "Review scores"
+    }
+
     dndod.popup({
       msg: msg,
       textAlign: "left",
       buttons: [
         {
-          text: "Close",
+          text: closeButtonText,
           type: "default",
           handler: (e, p) => {
             p.close()
