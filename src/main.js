@@ -1,6 +1,9 @@
 "use strict"
 
 import seedrandom from "seedrandom"
+import dndod from "dndod"
+import "dndod/dist/dndod-popup.min.css"
+
 const COMMON_WORDS_URL = "wordlists/common_words.txt"
 const ALL_WORDS_URL = "wordlists/all_words.txt"
 const THREE_LETTER_WORDS = new Set([
@@ -142,6 +145,23 @@ class Game {
     if (guess === "" && !force) {
       return
     }
+
+    // Replace guess input with div so we can style individual letters
+    guessElem.querySelector("input.guessInput").remove()
+    const newElem = document.createElement("div")
+    newElem.classList.add("submittedGuess")
+    var matchedLetters = 0
+    for (const letter of guess) {
+      const letterElem = document.createElement("span")
+      letterElem.classList.add("guessLetter")
+      letterElem.textContent = letter
+      if (letter === game.chosenLetters[matchedLetters]) {
+        letterElem.classList.add("givenLetter")
+        matchedLetters++
+      }
+      newElem.append(letterElem)
+    }
+    guessElem.prepend(newElem)
     const correct =
       game.isWord(guess) && game.matches(game.chosenLetters, guess)
     guessElem.classList.remove("active")
@@ -162,8 +182,10 @@ class Game {
     }
     game.nextRound()
     if (game.finished) {
-      for (const helpElem of gameElem.querySelectorAll(".guess .help")) {
-        helpElem.classList.remove("hidden")
+      for (const guessElem of gameElem.querySelectorAll(".guess")) {
+        if (guessElem.classList.contains("incorrect")) {
+          guessElem.querySelector(".help").classList.remove("hidden")
+        }
       }
       return
     }
@@ -173,8 +195,11 @@ class Game {
     newGuess.classList.remove("invisible")
     newGuess.querySelector("input.guessInput").disabled = true
     newGuess.querySelector("input.guessInput").value = ""
-    newGuess.querySelector(".help").title =
+    const helpText =
       game.chosenLetters.toUpperCase() + ": " + game.matchedWords[0]
+    newGuess.querySelector(".help").addEventListener("click", () => {
+      dndod.alert(helpText, { animation: "none" })
+    })
     newGuess.classList.add("active")
     gameElem.querySelector(".guesses").prepend(newGuess)
     currentGuessElem = newGuess
