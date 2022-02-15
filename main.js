@@ -1350,12 +1350,17 @@ class Game {
 Correct answers: ${score.numCorrect}/${game.rounds.length}
 Longest answer: ${score.longestWord}
 `;
+    var closeButtonText = "Close";
+    if (game.finished) {
+      closeButtonText = "Review scores";
+    }
+
     dndod.popup({
       msg: msg,
       textAlign: "left",
       buttons: [
         {
-          text: "Close",
+          text: closeButtonText,
           type: "default",
           handler: (e, p) => {
             p.close();
