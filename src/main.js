@@ -6,7 +6,7 @@ import "dndod/dist/dndod-popup.min.css"
 
 // The date of the first daily game
 // Tue Feb 15 2022
-const EPOCH = 1644883200
+const EPOCH = 1644883200000
 const COMMON_WORDS_URL = "wordlists/common_words.txt"
 const ALL_WORDS_URL = "wordlists/all_words.txt"
 const THREE_LETTER_WORDS = new Set([
@@ -371,7 +371,7 @@ class Game {
 
   var start = async () => {
     gameElem.querySelector(".givenLetters").classList.remove("hidden")
-    for (const startButton of gameElem.querySelectorAll(".start")) {
+    for (const startButton of gameElem.querySelectorAll(".start,.howToPlay")) {
       startButton.classList.add("hidden")
     }
     timebar.classList.add("animated")
@@ -422,11 +422,18 @@ class Game {
     })
   })
 
+  if (!localStorage.seenHelp) {
+    localStorage.seenHelp = true
+    setTimeout(() => {
+      document.querySelector(".howToPlay").click()
+    }, 0)
+  }
+
   document
     .querySelector(".startPractice")
     .addEventListener("click", async () => {
       seedrandom(undefined, { global: true })
-      await game.newGame("Practice", 5)
+      await game.newGame("Practice", 10)
       start()
     })
 
