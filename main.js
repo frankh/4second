@@ -1006,6 +1006,9 @@ function styleInject(css, ref) {
 var css_248z = ".dndod-wrapper{overflow:auto;position:fixed;top:0;left:0;right:0;bottom:0;z-index:1;background-color:transparent;transition-property:background-color;transition-duration:.25s;transform:translateZ(0)}.dndod-wrapper .dndod-popup{position:absolute;top:50%;left:50%;z-index:2;min-width:260px;max-width:100%;min-height:70px;padding:40px 50px;text-align:center;background-color:#fff;box-shadow:-1px 1px 5px rgba(0,0,0,.3);transform:translate(-50%,-50%);transition-property:top;transition-duration:.25s}.dndod-wrapper .dndod-popup .dndod-btn-close{display:block;overflow:hidden;position:absolute;top:3px;right:3px;width:30px;height:30px;margin:0;padding:0;border:0 none;font-family:sans-serif;font-size:2em;font-weight:lighter;line-height:1em;color:#c5c5c5;background-color:#fff;text-align:center;cursor:pointer}.dndod-wrapper .dndod-popup .dndod-btn-close:focus,.dndod-wrapper .dndod-popup .dndod-btn-close:hover{color:#929292}.dndod-wrapper .dndod-popup .dndod-btn-close:active{color:#797979}.dndod-wrapper .dndod-popup .dndod-heading{font-size:1.4em;margin:0 0 20px}.dndod-wrapper .dndod-popup .dndod-body{font-size:1.2em;line-height:1.4em;margin:20px 0}.dndod-wrapper .dndod-popup.dndod-text-left{text-align:left}.dndod-wrapper.dndod-status-show{background-color:rgba(0,0,0,.3)}.dndod-wrapper.dndod-animate-from-top .dndod-popup{top:-50%}.dndod-wrapper.dndod-animate-from-bottom .dndod-popup{top:150%}.dndod-wrapper.dndod-animate-from-bottom.dndod-status-show .dndod-popup,.dndod-wrapper.dndod-animate-from-top.dndod-status-show .dndod-popup{top:50%}.dndod-wrapper.dndod-oversize .dndod-popup{transform:translate(-50%)}.dndod-wrapper.dndod-oversize.dndod-status-show .dndod-popup{margin:30px 0;top:0!important;transition:none}.dndod-wrapper.dndod-has-btn .dndod-popup{padding-bottom:90px}.dndod-wrapper.dndod-no-outline .dndod-popup,.dndod-wrapper.dndod-no-outline .dndod-popup button{outline:0 none}.dndod-custom-btn-wrapper{display:flex;position:absolute;left:0;right:0;bottom:0;height:60px;flex-direction:row;justify-content:center;align-items:center}.dndod-custom-btn-wrapper .dndod-btn-custom{flex:auto;width:auto;height:100%;border:0 none;margin:0;padding:0;font-size:1.1em;cursor:pointer}.dndod-custom-btn-wrapper .dndod-btn-custom:focus,.dndod-custom-btn-wrapper .dndod-btn-custom:hover{background-color:#ddd}.dndod-custom-btn-wrapper .dndod-btn-custom:active{background-color:#d1d1d1}.dndod-custom-btn-wrapper .dndod-btn-custom.dndod-btn-default{background-color:#d8d8d8;color:#000}.dndod-custom-btn-wrapper .dndod-btn-custom.dndod-btn-default:focus,.dndod-custom-btn-wrapper .dndod-btn-custom.dndod-btn-default:hover{background-color:#cbcbcb}.dndod-custom-btn-wrapper .dndod-btn-custom.dndod-btn-default:active{background-color:#bfbfbf}.dndod-custom-btn-wrapper .dndod-btn-custom.dndod-btn-kakaobank{background-color:#ffde00;color:#000}.dndod-custom-btn-wrapper .dndod-btn-custom.dndod-btn-kakaobank:focus,.dndod-custom-btn-wrapper .dndod-btn-custom.dndod-btn-kakaobank:hover{background-color:#e6c800}.dndod-custom-btn-wrapper .dndod-btn-custom.dndod-btn-kakaobank:active{background-color:#ccb200}.dndod-custom-btn-wrapper .dndod-btn-custom.dndod-btn-primary{background-color:#00d1b2;color:#fff}.dndod-custom-btn-wrapper .dndod-btn-custom.dndod-btn-primary:focus,.dndod-custom-btn-wrapper .dndod-btn-custom.dndod-btn-primary:hover{background-color:#00b89c}.dndod-custom-btn-wrapper .dndod-btn-custom.dndod-btn-primary:active{background-color:#009e87}.dndod-custom-btn-wrapper .dndod-btn-custom.dndod-btn-danger{background-color:#ff3860;color:#fff}.dndod-custom-btn-wrapper .dndod-btn-custom.dndod-btn-danger:focus,.dndod-custom-btn-wrapper .dndod-btn-custom.dndod-btn-danger:hover{background-color:#ff1f4c}.dndod-custom-btn-wrapper .dndod-btn-custom.dndod-btn-danger:active{background-color:#ff0537}.dndod-custom-btn-wrapper .dndod-btn-custom.dndod-btn-warning{background-color:#ffdd57;color:rgba(0,0,0,.7)}.dndod-custom-btn-wrapper .dndod-btn-custom.dndod-btn-warning:focus,.dndod-custom-btn-wrapper .dndod-btn-custom.dndod-btn-warning:hover{background-color:#ffd83e}.dndod-custom-btn-wrapper .dndod-btn-custom.dndod-btn-warning:active{background-color:#ffd324}.dndod-custom-btn-wrapper .dndod-btn-custom.dndod-btn-success{background-color:#23d160;color:#fff}.dndod-custom-btn-wrapper .dndod-btn-custom.dndod-btn-success:focus,.dndod-custom-btn-wrapper .dndod-btn-custom.dndod-btn-success:hover{background-color:#1fbb56}.dndod-custom-btn-wrapper .dndod-btn-custom.dndod-btn-success:active{background-color:#1ca54c}.dndod-custom-btn-wrapper .dndod-btn-custom.dndod-btn-info{background-color:#209cee;color:#fff}.dndod-custom-btn-wrapper .dndod-btn-custom.dndod-btn-info:focus,.dndod-custom-btn-wrapper .dndod-btn-custom.dndod-btn-info:hover{background-color:#1190e3}.dndod-custom-btn-wrapper .dndod-btn-custom.dndod-btn-info:active{background-color:#1081cb}";
 styleInject(css_248z);
 
+// The date of the first daily game
+// Tue Feb 15 2022
+const EPOCH = 1644883200;
 const COMMON_WORDS_URL = "wordlists/common_words.txt";
 const ALL_WORDS_URL = "wordlists/all_words.txt";
 const THREE_LETTER_WORDS = new Set([
@@ -1048,6 +1051,8 @@ class Game {
   currentRound = 0
   numRounds
   rounds = []
+  guesses = []
+  name
   allWords
   commonWords
 
@@ -1097,6 +1102,13 @@ class Game {
 [this.chosenLetters, this.matchedWords] = this.rounds[0];
   }
 
+  async newGame(name, numRounds) {
+    this.guesses = [];
+    this.rounds = [];
+    this.name = name;
+    await this.generateRounds(numRounds);
+  }
+
   nextRound() {
     this.currentRound++;
     if (this.currentRound == this.numRounds) {
@@ -1127,6 +1139,33 @@ class Game {
       `^${consonants[0]}.*${consonants[1]}.*${consonants[2]}`
     );
     return word.match(regex) !== null
+  }
+
+  guess(guess) {
+    const correct =
+      this.isWord(guess) && this.matches(this.chosenLetters, guess);
+    this.guesses[this.currentRound] = {
+      guess: guess,
+      correct: correct,
+    };
+    return correct
+  }
+
+  getScore() {
+    var numCorrect = 0;
+    var longestWord = 0;
+    for (const guess of this.guesses) {
+      if (guess.correct) {
+        numCorrect++;
+        if (guess.guess.length > longestWord) {
+          longestWord = guess.guess.length;
+        }
+      }
+    }
+    return {
+      numCorrect: numCorrect,
+      longestWord: longestWord,
+    }
   }
 }
 (async () => {
@@ -1163,8 +1202,7 @@ class Game {
       newElem.append(letterElem);
     }
     guessElem.prepend(newElem);
-    const correct =
-      game.isWord(guess) && game.matches(game.chosenLetters, guess);
+    const correct = game.guess(guess);
     guessElem.classList.remove("active");
     guessElem.classList.add("submitted");
     if (correct) {
@@ -1188,6 +1226,8 @@ class Game {
           guessElem.querySelector(".help").classList.remove("hidden");
         }
       }
+      recordScores();
+      showScores();
       return
     }
 
@@ -1196,10 +1236,12 @@ class Game {
     newGuess.classList.remove("invisible");
     newGuess.querySelector("input.guessInput").disabled = true;
     newGuess.querySelector("input.guessInput").value = "";
-    const helpText =
-      game.chosenLetters.toUpperCase() + ": " + game.matchedWords[0];
+    const helpText = `
+      Letters: ${game.chosenLetters.toUpperCase()}
+      Example answer: ${game.matchedWords[0]}
+    `;
     newGuess.querySelector(".help").addEventListener("click", () => {
-      dndod.alert(helpText, { animation: "none" });
+      dndod.alert(helpText, { animation: "none", textAlign: "left" });
     });
     newGuess.classList.add("active");
     gameElem.querySelector(".guesses").prepend(newGuess);
@@ -1292,8 +1334,43 @@ class Game {
     }
   };
 
+  var recordScores = () => {
+    if (!localStorage.scores) {
+      localStorage.scores = {};
+    }
+  };
+
+  var showScores = () => {
+    const score = game.getScore();
+    const msg = `
+      4 Second Word Game (${game.name})
+      Correct answers: ${score.numCorrect}/${game.rounds.length}
+      Longest answer: ${score.longestWord}
+    `;
+    dndod.popup({
+      msg: msg,
+      textAlign: "left",
+      buttons: [
+        {
+          text: "Close",
+          type: "default",
+          handler: (e, p) => {
+            p.close();
+          },
+        },
+        {
+          text: "Share",
+          type: "primary",
+          handler: () => {
+            navigator.clipboard.writeText(msg);
+            dndod.alert("Copied to clipboard", { animation: "none" });
+          },
+        },
+      ],
+    });
+  };
+
   var start = async () => {
-    await game.generateRounds(10);
     gameElem.querySelector(".givenLetters").classList.remove("hidden");
     for (const startButton of gameElem.querySelectorAll(".start")) {
       startButton.classList.add("hidden");
@@ -1326,13 +1403,38 @@ class Game {
     }, 1000);
   };
 
-  document.querySelector(".startPractice").addEventListener("click", () => {
-    seedrandom(undefined, { global: true });
-    start();
+  document.querySelector(".howToPlay").addEventListener("click", async () => {
+    const msg = document.querySelector(".howToPlayText").cloneNode(true);
+    msg.classList.remove("hidden");
+    dndod.popup({
+      title: "How to play 4 Second Word Game",
+      msg: msg,
+      textAlign: "left",
+      enableHTML: true,
+      buttons: [
+        {
+          text: "Close",
+          type: "default",
+          handler: (e, p) => {
+            p.close();
+          },
+        },
+      ],
+    });
   });
 
-  document.querySelector(".startDaily").addEventListener("click", () => {
+  document
+    .querySelector(".startPractice")
+    .addEventListener("click", async () => {
+      seedrandom(undefined, { global: true });
+      await game.newGame("Practice", 5);
+      start();
+    });
+
+  document.querySelector(".startDaily").addEventListener("click", async () => {
     seedrandom(new Date().toDateString(), { global: true });
+    const dailyNum = Math.ceil((new Date().getTime() - EPOCH) / 86400000);
+    await game.newGame("Daily #" + dailyNum, 10);
     start();
   });
 })();

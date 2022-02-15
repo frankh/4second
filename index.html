@@ -151,6 +151,12 @@
         text-transform: uppercase;
       }
 
+      .submittedGuess:before {
+        content: 'A';
+        width: 0;
+        visibility: hidden;
+        float: right;
+      }
       .guessLetter.givenLetter {
         color: #fffc9c;
       }
@@ -194,7 +200,7 @@
         height: 0;
       }
 
-      .start {
+      .button {
         flex-basis: calc(50% - 6px);
         margin: 3px;
         background-color: #383838;
@@ -203,6 +209,10 @@
         justify-content: center;
         height: 3em;
         cursor: pointer;
+      }
+
+      .howToPlay.button {
+        flex-basis: calc(100% - 6px);
       }
 
       .dndod-wrapper .dndod-popup {
@@ -215,8 +225,21 @@
     <div class="flexBreak"></div>
 
     <div class="game">
-      <div class="start startPractice">Practice</div>
-      <div class="start startDaily">Daily</div>
+      <div class="hidden howToPlayText">
+        Each round you will be given 3 letters.<br />
+        You will have 4 seconds to enter a word which begins with the first letter
+        and contains the other 2 letters in order
+        <br /><br />
+        For example for the letters <bold>RGN</bold> you could answer <italic>RINGING</italic>
+        You could not answer <italic>RING</italic> because that doesn't have a G before an N
+        <br /><br />
+        Each game consists of 10 rounds each lasting 4 seconds
+        <br />
+        Good luck!
+      </div>
+      <div class="button howToPlay">How to Play</div>
+      <div class="button start startPractice">Practice</div>
+      <div class="button start startDaily">Daily</div>
       <div class="givenLetters hidden">
         <div class="letterBox"><div class="letter"></div></div>
         <div class="letterBox"><div class="letter"></div></div>
