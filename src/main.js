@@ -408,6 +408,7 @@ class Game {
     dndod.popup({
       title: "How to play 4 Second Word Game",
       msg: msg,
+      disableOutline: true,
       textAlign: "left",
       enableHTML: true,
       buttons: [
