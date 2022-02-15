@@ -142,15 +142,28 @@
         opacity: 1;
       }
 
+      .submittedGuess {
+        width: 100%;
+        border: none;
+        background-color: #131313;
+        color: white;
+        font-size: 2em;
+        text-transform: uppercase;
+      }
+
+      .guessLetter.givenLetter {
+        color: #fffc9c;
+      }
+
       .guessInput:focus-visible {
         outline: none;
       }
 
-      .guess.correct .guessInput {
+      .guess.correct .submittedGuess {
         outline: solid 1px green;
       }
 
-      .guess.incorrect .guessInput {
+      .guess.incorrect .submittedGuess {
         outline: solid 1px red;
       }
 
@@ -190,6 +203,10 @@
         justify-content: center;
         height: 3em;
         cursor: pointer;
+      }
+
+      .dndod-wrapper .dndod-popup {
+        color: black;
       }
     </style>
   </head>
