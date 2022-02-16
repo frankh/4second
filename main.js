@@ -1342,11 +1342,11 @@ class Game {
 
   var showScores = () => {
     const score = game.getScore();
-    const msg = `
-      4 Second Word Game (${game.name})
-      Correct answers: ${score.numCorrect}/${game.rounds.length}
-      Longest answer: ${score.longestWord}
-    `;
+    const msg = `4 Second Word Game (${game.name})
+
+Correct answers: ${score.numCorrect}/${game.rounds.length}
+Longest answer: ${score.longestWord}
+`;
     dndod.popup({
       msg: msg,
       textAlign: "left",
