@@ -351,7 +351,7 @@ Longest answer: ${score.longestWord}
 `
     var closeButtonText = "Close"
     if (game.finished) {
-      closeButtonText = "Review scores"
+      closeButtonText = "Review answers"
     }
 
     dndod.popup({
