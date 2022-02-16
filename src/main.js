@@ -97,7 +97,7 @@ class Game {
       const [chosenLetters, matchedWords] = await this.newLetters()
       this.rounds.push([chosenLetters, matchedWords])
     }
-    ;[this.chosenLetters, this.matchedWords] = this.rounds[0]
+    [this.chosenLetters, this.matchedWords] = this.rounds[0]
   }
 
   async newGame(name, numRounds) {
@@ -115,7 +115,7 @@ class Game {
       this.finished = true
       return
     }
-    ;[this.chosenLetters, this.matchedWords] = this.rounds[this.currentRound]
+    [this.chosenLetters, this.matchedWords] = this.rounds[this.currentRound]
   }
 
   isWord(word) {
@@ -167,7 +167,7 @@ class Game {
   }
 }
 
-;(async () => {
+(async () => {
   var game = new Game()
   await game.loadLists()
   var timebar = document.querySelector(".timebar")
@@ -335,12 +335,15 @@ class Game {
 
   var recordScores = () => {
     if (!localStorage.scores) {
-      localStorage.scores = {}
+      localStorage.scores = "{}"
     }
+    var scores = JSON.parse(localStorage.scores)
+    scores[game.name] = game.getScore()
+    localStorage.scores = JSON.stringify(scores)
   }
 
   var showScores = () => {
-    const score = game.getScore()
+    const score = JSON.parse(localStorage.scores)[game.name]
     const msg = `4 Second Word Game (${game.name})
 
 Correct answers: ${score.numCorrect}/${game.rounds.length}
@@ -442,6 +445,10 @@ Longest answer: ${score.longestWord}
     seedrandom(new Date().toDateString(), { global: true })
     const dailyNum = Math.ceil((new Date().getTime() - EPOCH) / 86400000)
     await game.newGame("Daily #" + dailyNum, 10)
-    start()
+    if (JSON.parse(localStorage.scores)[game.name]) {
+      showScores()
+    } else {
+      start()
+    }
   })
 })()
