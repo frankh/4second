@@ -1451,7 +1451,7 @@ Longest answer: ${score.longestWord}
     seedrandom(new Date().toDateString(), { global: true });
     const dailyNum = Math.ceil((new Date().getTime() - EPOCH) / 86400000);
     await game.newGame("Daily #" + dailyNum, 10);
-    if (JSON.parse(localStorage.scores)[game.name]) {
+    if (JSON.parse(localStorage.scores || "{}")[game.name]) {
       showScores();
     } else {
       start();
